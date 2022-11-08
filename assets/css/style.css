@@ -1,0 +1,8 @@
+.superhero {
+    background: turquoise;
+    margin: 0 5px 0;
+}
+
+#add-superhero-field > * {
+    margin: 5px 0;
+}
