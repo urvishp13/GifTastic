@@ -30,6 +30,7 @@ $('#add-superhero').click(function () {
         .then(function () {
             let $newSuperhero = $('#search-field').val();
             createButton($newSuperhero);
+            $('#search-field').val('');
         })
     });
     
@@ -65,8 +66,8 @@ $('#superheroes').on('click', 'button', function () {
             // console.log(gifs);
             
             for (let i = 0; i < response.data.length; i++) {
-                let gifURL = response.data[i].url;
-                console.log(gifURL);
+                let gifURL = response.data[i].images.fixed_height_small_still.url;
+                //console.log(gifURL);
 
                 let $gifImg = $('<img>')
                     .attr('src', gifURL);
