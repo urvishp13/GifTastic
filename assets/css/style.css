@@ -1,8 +1,26 @@
-.superhero {
+button {
     background: turquoise;
     margin: 0 5px 0;
 }
 
 #add-superhero-field > * {
     margin: 5px 0;
+}
+
+#gifImages {
+    border: 1px solid black;
+    display: inline-block;
+    width: 60%;
+    height: 600px;
+}
+
+#add-superhero-field {
+    border: 1px solid black;
+    display: inline-block;
+    width: 20%;
+    vertical-align: top;
+}
+
+#gifImages, #add-superhero-field {
+    margin: 5px;
 }
