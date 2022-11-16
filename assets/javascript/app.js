@@ -97,7 +97,7 @@ $('#gifsSection').on('click', 'img', function() {
             console.log("response after clicking ANY image", response);
 
             // Get the gif's URL and animate the still-image 
-            let gifURL = response.data[id].url;
+            let gifURL = response.data[id].images.fixed_height.url;
             console.log("gif's url: " + gifURL);
             $stillImg.attr('src', gifURL); // rewriting source to be that of gifs
             
