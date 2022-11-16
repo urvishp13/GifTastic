@@ -103,33 +103,16 @@ $('#gifsSection').on('click', 'img', function() {
                 let $gif = $stillImg;
                 $gif.attr('src', stillImgURL);
 
-                console.log('still-img', $gif);
+                //console.log('still-img', $gif);
             } 
             else {
                 // Get the gif's URL and animate the still-image 
                 let gifURL = response.data[id].images.fixed_height.url;
-                // console.log("gif's url: " + gifURL);
+                //console.log("gif's url: " + gifURL);
                 $stillImg.attr('src', gifURL); // rewriting source to be that of gifs
                 
                 //console.log('meta', response.meta);
-                console.log("gif", $stillImg);
+                //console.log("gif", $stillImg);
             }
         })
-});
-
-// If gif is clicked on
-$('#gifsSection').on('click', 'img', function() {
-    // Reset the gif back to its still-image version
-    let $gif = $(this); // extract this gif
-    let id = $gif.attr('id');
-
-    $.ajax({
-        url: superheroQueryURL,
-        method: "GET"
-    })
-        .then(function(response) {
-            // Get the id of this gif
-            
-        })
-    
 });
