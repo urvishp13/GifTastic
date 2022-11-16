@@ -21,7 +21,6 @@ superheroes.forEach(superhero => createButton(superhero));
 
 // When the add superhero button is clicked
 $('#add-superhero').click(function () {
-    // One AJAX call
     $.ajax({
         // Designate the index.html page as the page to write the new button to
         url: "index.html"
@@ -36,46 +35,79 @@ $('#add-superhero').click(function () {
     
 // Show 10 pictures of ANY clicked superhero from #superheroes in #gifImages section
 // When ANY superhero button is click
+var superheroQueryURL;
+
+// When you click on ANY button
 $('#superheroes').on('click', 'button', function () {
-    // Clear the #gifImages section to make room for the new superhero
-    $('#gifImages').empty();
-    // Get its superhero value
+    // Clear the #gifsSection to make room for gifs of the new superhero
+    $('#gifsSection').empty();
+    // Get button's superhero value
+    let superhero = $(this).text();
     // Format the queryURL to have the superhero name that has been clicked on as the one's GIFs to be searched for
-    let searchQuery = `q=${$(this).text()}`; // extract the superhero name from the button
+    let searchQuery = `q=${superhero}`;
     let limitQuery = "limit=10";
     let ratingQuery = "rating=g";
 
-    let superheroQueryURL = queryURL + "&" + searchQuery + "&" + limitQuery + "&" + ratingQuery;
-    console.log("superheroQueryURL: " + superheroQueryURL);
+    superheroQueryURL = queryURL + "&" + searchQuery + "&" + limitQuery + "&" + ratingQuery;
+    //console.log("superheroQueryURL: " + superheroQueryURL);
 
-    // Another AJAX call
     $.ajax({
         // Get the GIFs from the GIPHY API
         url: superheroQueryURL,
         method: "GET"
     })
         .then(function (response) {
-            console.log("response: ");
+            console.log("response on button click: ");
             console.log(response);
             // For each gif data in the response
-                // Extract the gif's url
-                // Make an image with the gif's url as the source (src)
-                // Prepend the gif into the #gifImages section 
-            // let gifs = Object.values(response);
-            // console.log("gifs:");
-            // console.log(gifs);
-            
             for (let i = 0; i < response.data.length; i++) {
-                let gifURL = response.data[i].images.fixed_height_small_still.url;
-                //console.log(gifURL);
+                // Extract the gif's still-image url
+                let stillImgURL = response.data[i].images.fixed_height_still.url;
+                //console.log(stillImgURL);
 
-                let $gifImg = $('<img>')
-                    .attr('src', gifURL);
-                    // .attr('alt', `${}`);
+                // Make an image with the still-image-gif's url as the source (src)
+                let $stillImg = $('<img>')
+                    .attr('id', i)
+                    .attr('src', stillImgURL)
+                    .attr('alt', superhero);
+                console.log("$stillImg:");
+                console.log($stillImg);
 
-                // console.log("gifImg:");
-                // console.log($gifImg);
-                $('#gifImages').prepend($gifImg);
+                // Append the gif into the #gifsSection 
+                $('#gifsSection').append($stillImg);
             }
         })
     });
+
+// Create an event of on-click on ANY of the still-image gifs
+$('#gifsSection').on('click', 'img', function() {
+    // Extract the image that has been clicked on
+    let $stillImg = $(this);
+    console.log("still-img data:");
+    console.log($stillImg);
+    // Extract the id of the image clicked on to get the image clicked on
+    let id = $stillImg.attr('id');
+    console.log("id of image clicked on: " + id);
+
+    //console.log("superheroQueryURL: " + superheroQueryURL);
+    
+    $.ajax({
+        // Get the GIFs from the API again to get the moving-gif URL
+        url: superheroQueryURL,
+        method: "GET"
+    })
+        .then(function(response) {
+            console.log("response after clicking ANY image:");
+            console.log(response);
+
+            // Get the gif's URL and animate the still-image 
+            let gifURL = response.data[id].url;
+            console.log("gif's url: " + gifURL);
+            $stillImg.attr('src', gifURL); // rewriting source to be that of gifs
+
+            console.log("gif: ");
+            console.log($stillImg);
+        // If clicked on it again
+            // Reset the gif to its still-image version
+        })
+});
