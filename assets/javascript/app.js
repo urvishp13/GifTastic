@@ -69,7 +69,7 @@ $('#superheroes').on('click', 'button', function () {
                     .attr('id', i)
                     .attr('src', stillImgURL)
                     .attr('alt', superhero);
-                console.log("$stillImg", $stillImg);
+                //console.log("$stillImg", $stillImg);
 
                 // Append the gif into the #gifsSection 
                 $('#gifsSection').prepend($stillImg);
@@ -81,10 +81,10 @@ $('#superheroes').on('click', 'button', function () {
 $('#gifsSection').on('click', 'img', function() {
     // Extract the image that has been clicked on
     let $stillImg = $(this);
-    console.log("still-img data", $stillImg);
+    //console.log("still-img data", $stillImg);
     // Extract the id of the image clicked on to get the image clicked on
     let id = $stillImg.attr('id');
-    console.log("id of image clicked on: " + id);
+    //console.log("id of image clicked on: " + id);
 
     //console.log("superheroQueryURL: " + superheroQueryURL);
     
@@ -96,15 +96,40 @@ $('#gifsSection').on('click', 'img', function() {
         .then(function(response) {
             console.log("response after clicking ANY image", response);
 
-            // Get the gif's URL and animate the still-image 
-            let gifURL = response.data[id].images.fixed_height.url;
-            console.log("gif's url: " + gifURL);
-            $stillImg.attr('src', gifURL); // rewriting source to be that of gifs
-            
-            // console.log('meta', response.meta);
-            // console.log("gif: ");
-            // console.log($stillImg);
-        // If clicked on it again
-            // Reset the gif to its still-image version
+            // If the source of this image is the gifURL
+            if ($stillImg.attr('src') === response.data[id].images.fixed_height.url) {
+                // Change it to the still-image
+                let stillImgURL = response.data[id].images.fixed_height_still.url;
+                let $gif = $stillImg;
+                $gif.attr('src', stillImgURL);
+
+                console.log('still-img', $gif);
+            } 
+            else {
+                // Get the gif's URL and animate the still-image 
+                let gifURL = response.data[id].images.fixed_height.url;
+                // console.log("gif's url: " + gifURL);
+                $stillImg.attr('src', gifURL); // rewriting source to be that of gifs
+                
+                //console.log('meta', response.meta);
+                console.log("gif", $stillImg);
+            }
         })
+});
+
+// If gif is clicked on
+$('#gifsSection').on('click', 'img', function() {
+    // Reset the gif back to its still-image version
+    let $gif = $(this); // extract this gif
+    let id = $gif.attr('id');
+
+    $.ajax({
+        url: superheroQueryURL,
+        method: "GET"
+    })
+        .then(function(response) {
+            // Get the id of this gif
+            
+        })
+    
 });
