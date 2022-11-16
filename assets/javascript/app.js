@@ -57,8 +57,7 @@ $('#superheroes').on('click', 'button', function () {
         method: "GET"
     })
         .then(function (response) {
-            console.log("response on button click: ");
-            console.log(response);
+            console.log("response on button click", response);
             // For each gif data in the response
             for (let i = 0; i < response.data.length; i++) {
                 // Extract the gif's still-image url
@@ -70,11 +69,10 @@ $('#superheroes').on('click', 'button', function () {
                     .attr('id', i)
                     .attr('src', stillImgURL)
                     .attr('alt', superhero);
-                console.log("$stillImg:");
-                console.log($stillImg);
+                console.log("$stillImg", $stillImg);
 
                 // Append the gif into the #gifsSection 
-                $('#gifsSection').append($stillImg);
+                $('#gifsSection').prepend($stillImg);
             }
         })
     });
@@ -83,8 +81,7 @@ $('#superheroes').on('click', 'button', function () {
 $('#gifsSection').on('click', 'img', function() {
     // Extract the image that has been clicked on
     let $stillImg = $(this);
-    console.log("still-img data:");
-    console.log($stillImg);
+    console.log("still-img data", $stillImg);
     // Extract the id of the image clicked on to get the image clicked on
     let id = $stillImg.attr('id');
     console.log("id of image clicked on: " + id);
@@ -97,16 +94,16 @@ $('#gifsSection').on('click', 'img', function() {
         method: "GET"
     })
         .then(function(response) {
-            console.log("response after clicking ANY image:");
-            console.log(response);
+            console.log("response after clicking ANY image", response);
 
             // Get the gif's URL and animate the still-image 
             let gifURL = response.data[id].url;
             console.log("gif's url: " + gifURL);
             $stillImg.attr('src', gifURL); // rewriting source to be that of gifs
-
-            console.log("gif: ");
-            console.log($stillImg);
+            
+            // console.log('meta', response.meta);
+            // console.log("gif: ");
+            // console.log($stillImg);
         // If clicked on it again
             // Reset the gif to its still-image version
         })
