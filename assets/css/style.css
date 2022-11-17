@@ -15,7 +15,6 @@ button {
 }
 
 #gifsSection {
-    border: 1px solid black;
     display: inline-block;
     width: 60%;
     height: 100vh;

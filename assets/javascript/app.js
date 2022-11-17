@@ -16,24 +16,24 @@ var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=8MdAEnC5o8xrtEnYfGN
 // Hard code superheroes and give them the formatting I want all buttons to have
 var superheroes = ['batman','wonder woman','superman','aquaman','green lantern','captain america','iron man'];
 
-// Loop through each superhero and add their buttons to #searched-superhero. Give each superhero a .superhero class
+// Loop through each superhero and add their buttons to #superheroes
 superheroes.forEach(superhero => createButton(superhero));
 
-// When the add superhero button is clicked
+// When the #add-superhero button is clicked
 $('#add-superhero').click(function () {
     $.ajax({
         // Designate the index.html page as the page to write the new button to
         url: "index.html"
     })
-        // Extract searched superhero text from input field once #search-button is clicked
+        // Extract searched superhero text from input field once #add-superhero button is clicked
         .then(function () {
             let $newSuperhero = $('#search-field').val();
             createButton($newSuperhero);
-            $('#search-field').val('');
+            $('#search-field').val(''); // reset input field
         })
     });
     
-// Show 10 pictures of ANY clicked superhero from #superheroes in #gifImages section
+// Show 10 pictures of ANY clicked superhero from #superheroes in #gifsSection
 // When ANY superhero button is click
 var superheroQueryURL;
 
@@ -64,6 +64,10 @@ $('#superheroes').on('click', 'button', function () {
                 let stillImgURL = response.data[i].images.fixed_height_still.url;
                 //console.log(stillImgURL);
 
+                // Create a div to hold the gif and its rating together
+                let $div = $('<div>')
+                    .attr('class', 'gif');
+
                 // Make an image with the still-image-gif's url as the source (src)
                 let $stillImg = $('<img>')
                     .attr('id', i)
@@ -71,8 +75,14 @@ $('#superheroes').on('click', 'button', function () {
                     .attr('alt', superhero);
                 //console.log("$stillImg", $stillImg);
 
+                let $rating = $('<p>')
+                    .text(`rating: ${response.data[i].rating}`);
+
+                $div.append($stillImg);
+                $div.prepend($rating);
+
                 // Append the gif into the #gifsSection 
-                $('#gifsSection').prepend($stillImg);
+                $('#gifsSection').prepend($div);
             }
         })
     });
@@ -89,30 +99,29 @@ $('#gifsSection').on('click', 'img', function() {
     //console.log("superheroQueryURL: " + superheroQueryURL);
     
     $.ajax({
-        // Get the GIFs from the API again to get the moving-gif URL
+        // Get the GIFs from the API again to get the moving-gif URL/still-image URL
         url: superheroQueryURL,
         method: "GET"
     })
         .then(function(response) {
-            console.log("response after clicking ANY image", response);
-
             // If the source of this image is the gifURL
             if ($stillImg.attr('src') === response.data[id].images.fixed_height.url) {
                 // Change it to the still-image
                 let stillImgURL = response.data[id].images.fixed_height_still.url;
-                let $gif = $stillImg;
-                $gif.attr('src', stillImgURL);
+                $stillImg.attr('src', stillImgURL);
 
-                //console.log('still-img', $gif);
+                console.log('still-img', $stillImg);
             } 
             else {
+                console.log("response after clicking ANY image", response);
+
                 // Get the gif's URL and animate the still-image 
                 let gifURL = response.data[id].images.fixed_height.url;
                 //console.log("gif's url: " + gifURL);
                 $stillImg.attr('src', gifURL); // rewriting source to be that of gifs
                 
                 //console.log('meta', response.meta);
-                //console.log("gif", $stillImg);
+                console.log("gif", $stillImg);
             }
         })
 });
