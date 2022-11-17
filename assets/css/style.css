@@ -8,7 +8,6 @@ button {
 }
 
 #add-superhero-field {
-    border: 1px solid black;
     display: inline-block;
     width: 20%;
     vertical-align: top;

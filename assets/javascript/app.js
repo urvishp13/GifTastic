@@ -1,38 +1,26 @@
-function createButton(superhero) {
-    // Create button
-    let $superheroButton = $('<button>')
-                        // Give each button the same class
-                        .attr('id', superhero)
-                        // Add text to the button of the current superhero
-                        .text(superhero);
-    
-    // Add newly created button to #superheroes section
-    $('#superheroes').append($superheroButton);
+// Hard code superheroes and give them the formatting I want all buttons to have
+var topics = ['batman','wonder woman','superman','aquaman','green lantern','captain america','iron man']; // global variable
+
+function createButtons() {
+    $('#superheroes').empty();
+    for (let i = 0; i < topics.length; i++) {
+        // Create button
+        let $superheroButton = $('<button>')
+                            // Give each button the same class
+                            .attr('id', topics[i])
+                            // Add text to the button of the current superhero
+                            .text(topics[i]);
+        
+        // Add newly created button to #superheroes section
+        $('#superheroes').append($superheroButton);
+    }
 }
+
+createButtons();
 
 // Get the link to do API requests
 var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=8MdAEnC5o8xrtEnYfGNqV3fkqDjgoK62";
 
-// Hard code superheroes and give them the formatting I want all buttons to have
-var superheroes = ['batman','wonder woman','superman','aquaman','green lantern','captain america','iron man'];
-
-// Loop through each superhero and add their buttons to #superheroes
-superheroes.forEach(superhero => createButton(superhero));
-
-// When the #add-superhero button is clicked
-$('#add-superhero').click(function () {
-    $.ajax({
-        // Designate the index.html page as the page to write the new button to
-        url: "index.html"
-    })
-        // Extract searched superhero text from input field once #add-superhero button is clicked
-        .then(function () {
-            let $newSuperhero = $('#search-field').val();
-            createButton($newSuperhero);
-            $('#search-field').val(''); // reset input field
-        })
-    });
-    
 // Show 10 pictures of ANY clicked superhero from #superheroes in #gifsSection
 // When ANY superhero button is click
 var superheroQueryURL;
@@ -66,7 +54,11 @@ $('#superheroes').on('click', 'button', function () {
 
                 // Create a div to hold the gif and its rating together
                 let $div = $('<div>')
-                    .attr('class', 'gif');
+                    .attr('class', 'gif')
+                    .css({
+                        'display':'inline-block',
+                        'margin':'5px'
+                    });
 
                 // Make an image with the still-image-gif's url as the source (src)
                 let $stillImg = $('<img>')
@@ -125,3 +117,13 @@ $('#gifsSection').on('click', 'img', function() {
             }
         })
 });
+
+// When the #add-superhero button is clicked
+$('#add-superhero').click(function (event) {
+    event.preventDefault(); // alternative to ajax call in the case that this doesn't allow the page to reload
+    topics.push($('#search-field').val().trim());
+    // Remake the buttons on the page
+    createButtons();
+    $('#search-field').val(''); // reset input field   
+});
+    
